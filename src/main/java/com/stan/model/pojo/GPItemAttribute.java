@@ -18,6 +18,7 @@ public class GPItemAttribute {
     private String name;
     private Long attributeIndex;
     private Long typeid;
+    private Long searchable;
 
     private Timestamp dateCreated;
     private Timestamp dateUpdated;
@@ -69,5 +70,13 @@ public class GPItemAttribute {
 
     public void setDateUpdated(Timestamp dateUpdated) {
         this.dateUpdated = dateUpdated;
+    }
+
+    public Long getSearchable() {
+        return searchable;
+    }
+
+    public void setSearchable(Long searchable) {
+        this.searchable = searchable;
     }
 }
