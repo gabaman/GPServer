@@ -18,7 +18,7 @@ public class GPType {
     private Long typeprefix;
     private String image;
     private Long gameid;
-    private Long istext;
+    private Long isItem;
 
     private Timestamp dateCreated;
     private Timestamp dateUpdated;
@@ -63,12 +63,12 @@ public class GPType {
         this.gameid = gameid;
     }
 
-    public Long getIstext() {
-        return istext;
+    public Long getIsItem() {
+        return isItem;
     }
 
-    public void setIstext(Long istext) {
-        this.istext = istext;
+    public void setIsItem(Long isItem) {
+        this.isItem = isItem;
     }
 
     public Timestamp getDateCreated() {
