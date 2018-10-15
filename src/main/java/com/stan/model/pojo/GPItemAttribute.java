@@ -6,18 +6,18 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import java.sql.Timestamp;
 
-@Table(name = "gp_game")
-public class Game {
+@Table(name = "gp_item_mapper")
+public class GPItemAttribute {
+
+
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String name;
-    private String brief;
-    private String company;
-    private String score;
-    private String image;
+    private Long attributeIndex;
+    private Long typeid;
 
     private Timestamp dateCreated;
     private Timestamp dateUpdated;
@@ -39,36 +39,20 @@ public class Game {
         this.name = name;
     }
 
-    public String getBrief() {
-        return brief;
+    public Long getAttributeIndex() {
+        return attributeIndex;
     }
 
-    public void setBrief(String brief) {
-        this.brief = brief;
+    public void setAttributeIndex(Long attributeIndex) {
+        this.attributeIndex = attributeIndex;
     }
 
-    public String getCompany() {
-        return company;
+    public Long getTypeid() {
+        return typeid;
     }
 
-    public void setCompany(String company) {
-        this.company = company;
-    }
-
-    public String getScore() {
-        return score;
-    }
-
-    public void setScore(String score) {
-        this.score = score;
-    }
-
-    public String getImage() {
-        return image;
-    }
-
-    public void setImage(String image) {
-        this.image = image;
+    public void setTypeid(Long typeid) {
+        this.typeid = typeid;
     }
 
     public Timestamp getDateCreated() {
