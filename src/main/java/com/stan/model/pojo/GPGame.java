@@ -19,8 +19,8 @@ public class GPGame {
     private String score;
     private String image;
 
-    private Timestamp dateCreated;
-    private Timestamp dateUpdated;
+    private Timestamp datecreated;
+    private Timestamp dateupdated;
 
 
     public Long getId() {
@@ -71,19 +71,19 @@ public class GPGame {
         this.image = image;
     }
 
-    public Timestamp getDateCreated() {
-        return dateCreated;
+    public Timestamp getDatecreated() {
+        return datecreated;
     }
 
-    public void setDateCreated(Timestamp dateCreated) {
-        this.dateCreated = dateCreated;
+    public void setDatecreated(Timestamp datecreated) {
+        this.datecreated = datecreated;
     }
 
-    public Timestamp getDateUpdated() {
-        return dateUpdated;
+    public Timestamp getDateupdated() {
+        return dateupdated;
     }
 
-    public void setDateUpdated(Timestamp dateUpdated) {
-        this.dateUpdated = dateUpdated;
+    public void setDateupdated(Timestamp dateupdated) {
+        this.dateupdated = dateupdated;
     }
 }

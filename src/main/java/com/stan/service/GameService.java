@@ -119,7 +119,7 @@ public class GameService {
 
         List<ContentResult> temp = new ArrayList<>();
 
-        if (type.getIsItem() == 1){
+        if (type.getIsitem() == 1){
             Example itemExample = new Example(GPItem.class);
             itemExample.createCriteria().andEqualTo("typeid",type.getId());
             List<GPItem> itemRes = itemMapper.selectByExample(itemExample);
@@ -143,7 +143,7 @@ public class GameService {
 
     public List<GPWalkthrough> getPicOneWalkthrough(GPType type) {
 
-        if (type.getIsItem() == 0){
+        if (type.getIsitem() == 0){
             return null;
         }
 

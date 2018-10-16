@@ -93,26 +93,26 @@ public class ConsoleController {
         return service.esSaveAll(gameId);
     }
 
-    @RequestMapping(value = "/upload", method = RequestMethod.POST)
-    @ResponseBody
-    public GPResult upload(HttpServletRequest request, @RequestParam("file") MultipartFile file, String typeId) throws Exception {
-
-        return service.uploadImageWithTypeId(file,typeId);
-    }
-
-    @RequestMapping(value = "/delete", method = RequestMethod.POST)
-    @ResponseBody
-    public GPResult delete(HttpServletRequest request,  String typeId) throws Exception {
-
-        return service.delete(typeId);
-    }
-
-    @RequestMapping(value = "/addItem", method = RequestMethod.POST)
-    @ResponseBody
-    public GPResult addItem(HttpServletRequest request,  ConsoleUpdater updater, String categoryId) throws Exception {
-
-        return service.addItem(updater,categoryId);
-    }
+//    @RequestMapping(value = "/upload", method = RequestMethod.POST)
+//    @ResponseBody
+//    public GPResult upload(HttpServletRequest request, @RequestParam("file") MultipartFile file, String typeId) throws Exception {
+//
+//        return service.uploadImageWithTypeId(file,typeId);
+//    }
+//
+//    @RequestMapping(value = "/delete", method = RequestMethod.POST)
+//    @ResponseBody
+//    public GPResult delete(HttpServletRequest request,  String typeId) throws Exception {
+//
+//        return service.delete(typeId);
+//    }
+//
+//    @RequestMapping(value = "/addItem", method = RequestMethod.POST)
+//    @ResponseBody
+//    public GPResult addItem(HttpServletRequest request,  ConsoleUpdater updater, String categoryId) throws Exception {
+//
+//        return service.addItem(updater,categoryId);
+//    }
 
 
 }

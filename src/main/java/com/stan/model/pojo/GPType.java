@@ -18,12 +18,12 @@ public class GPType {
     private Long typeprefix;
     private String image;
     private Long gameid;
-    private Long isItem;
-    private String searchImage;
+    private Long isitem;
+    private String searchimage;
 
 
-    private Timestamp dateCreated;
-    private Timestamp dateUpdated;
+    private Timestamp datecreated;
+    private Timestamp dateupdated;
 
     public Long getId() {
         return id;
@@ -65,35 +65,35 @@ public class GPType {
         this.gameid = gameid;
     }
 
-    public Long getIsItem() {
-        return isItem;
+    public Long getIsitem() {
+        return isitem;
     }
 
-    public void setIsItem(Long isItem) {
-        this.isItem = isItem;
+    public void setIsitem(Long isitem) {
+        this.isitem = isitem;
     }
 
-    public Timestamp getDateCreated() {
-        return dateCreated;
+    public String getSearchimage() {
+        return searchimage;
     }
 
-    public void setDateCreated(Timestamp dateCreated) {
-        this.dateCreated = dateCreated;
+    public void setSearchimage(String searchimage) {
+        this.searchimage = searchimage;
     }
 
-    public Timestamp getDateUpdated() {
-        return dateUpdated;
+    public Timestamp getDatecreated() {
+        return datecreated;
     }
 
-    public void setDateUpdated(Timestamp dateUpdated) {
-        this.dateUpdated = dateUpdated;
+    public void setDatecreated(Timestamp datecreated) {
+        this.datecreated = datecreated;
     }
 
-    public String getSearchImage() {
-        return searchImage;
+    public Timestamp getDateupdated() {
+        return dateupdated;
     }
 
-    public void setSearchImage(String searchImage) {
-        this.searchImage = searchImage;
+    public void setDateupdated(Timestamp dateupdated) {
+        this.dateupdated = dateupdated;
     }
 }

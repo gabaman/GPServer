@@ -94,7 +94,7 @@ public class ConsoleService {
                 }
 
                 for (GPItemAttribute attribute:tagList){
-                    switch (attribute.getAttributeIndex().intValue()){
+                    switch (attribute.getAttributeindex().intValue()){
                         case 0:
                             if (item.getAttribute1().contains(key)){
                                 FinderResult finderResult = new FinderResult(item.getLocid(),type.getTypename(),attribute.getName(),item.getAttribute1());
@@ -279,7 +279,7 @@ public class ConsoleService {
 
 
 
-        if (typeList.get(0).getIsItem() == Long.valueOf(0)){
+        if (typeList.get(0).getIsitem() == Long.valueOf(0)){
 
             Example attributeExample = new Example(GPItemAttribute.class);
             attributeExample.createCriteria().andEqualTo("typeid",typeList.get(0).getId());
@@ -379,7 +379,7 @@ public class ConsoleService {
             return item;
         }
 
-        switch (attribute.getAttributeIndex().intValue()){
+        switch (attribute.getAttributeindex().intValue()){
             case 0:
                 item.setAttribute1(value);
                 break;
@@ -412,7 +412,7 @@ public class ConsoleService {
 
     public GPResult walkthroughUpdateContent(Long id,String content){
         Example example = new Example(GPWalkthrough.class);
-        example.createCriteria().andEqualTo("id",id).;
+        example.createCriteria().andEqualTo("id",id);
         List<GPWalkthrough> walkthroughList = walkthroughMapper.selectByExample(example);
         if (walkthroughList.size() <1 || walkthroughList == null){
             GPResult.build(400,"找不到对应id");
@@ -425,7 +425,7 @@ public class ConsoleService {
 
     public GPResult walkthroughUpdateTitle(Long typeId,String title){
         Example example = new Example(GPWalkthrough.class);
-        example.createCriteria().andEqualTo("typeId",typeId).;
+        example.createCriteria().andEqualTo("typeId",typeId);
         List<GPWalkthrough> walkthroughList = walkthroughMapper.selectByExample(example);
         if (walkthroughList.size() <1 || walkthroughList == null){
             GPResult.build(400,"找不到对应id");
@@ -450,10 +450,10 @@ public class ConsoleService {
         List<Map> temp = new ArrayList<>();
 
         for (GPType type:typeList) {
-            if (type.getIsItem().intValue() == 0){
+            if (type.getIsitem().intValue() == 0){
                 temp.addAll(this.esSaveAllItem(type.getId()));
             }else {
-                temp.addAll(this.esSaveAllWalkthrought(type.getId(),type.getSearchImage()));
+                temp.addAll(this.esSaveAllWalkthrought(type.getId(),type.getSearchimage()));
             }
         }
 
@@ -506,24 +506,24 @@ public class ConsoleService {
 
     }
 
-    public GPResult uploadImageWithTypeId(MultipartFile file, Long typeId) throws Exception {
-
-        COSClientUtil util = new COSClientUtil();
-
-        if (typeId.startsWith("1")||typeId.startsWith("0")) {
-            return GPResult.build(400, "不能修改temple和主线的图片");
-        }
-        if (!findTypeId(typeId)){
-            return GPResult.build(400, "未能找到typeId");
-        }
-
-        String name = util.uploadFile2Cos(file,"content/"+typeId+".jpg");
-        String imgUrl = util.getImgUrl(name);
-        String[] split = imgUrl.split("\\?");
-
-        return GPResult.ok(split[0]);
-
-    }
+//    public GPResult uploadImageWithTypeId(MultipartFile file, Long typeId) throws Exception {
+//
+//        COSClientUtil util = new COSClientUtil();
+//
+//        if (typeId.startsWith("1")||typeId.startsWith("0")) {
+//            return GPResult.build(400, "不能修改temple和主线的图片");
+//        }
+//        if (!findTypeId(typeId)){
+//            return GPResult.build(400, "未能找到typeId");
+//        }
+//
+//        String name = util.uploadFile2Cos(file,"content/"+typeId+".jpg");
+//        String imgUrl = util.getImgUrl(name);
+//        String[] split = imgUrl.split("\\?");
+//
+//        return GPResult.ok(split[0]);
+//
+//    }
 
 }
 

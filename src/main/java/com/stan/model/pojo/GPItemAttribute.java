@@ -16,12 +16,12 @@ public class GPItemAttribute {
     private Long id;
 
     private String name;
-    private Long attributeIndex;
+    private Long attributeindex;
     private Long typeid;
     private Long searchable;
 
-    private Timestamp dateCreated;
-    private Timestamp dateUpdated;
+    private Timestamp datecreated;
+    private Timestamp dateupdated;
 
 
     public Long getId() {
@@ -40,12 +40,12 @@ public class GPItemAttribute {
         this.name = name;
     }
 
-    public Long getAttributeIndex() {
-        return attributeIndex;
+    public Long getAttributeindex() {
+        return attributeindex;
     }
 
-    public void setAttributeIndex(Long attributeIndex) {
-        this.attributeIndex = attributeIndex;
+    public void setAttributeindex(Long attributeindex) {
+        this.attributeindex = attributeindex;
     }
 
     public Long getTypeid() {
@@ -56,21 +56,6 @@ public class GPItemAttribute {
         this.typeid = typeid;
     }
 
-    public Timestamp getDateCreated() {
-        return dateCreated;
-    }
-
-    public void setDateCreated(Timestamp dateCreated) {
-        this.dateCreated = dateCreated;
-    }
-
-    public Timestamp getDateUpdated() {
-        return dateUpdated;
-    }
-
-    public void setDateUpdated(Timestamp dateUpdated) {
-        this.dateUpdated = dateUpdated;
-    }
 
     public Long getSearchable() {
         return searchable;
@@ -78,5 +63,21 @@ public class GPItemAttribute {
 
     public void setSearchable(Long searchable) {
         this.searchable = searchable;
+    }
+
+    public Timestamp getDatecreated() {
+        return datecreated;
+    }
+
+    public void setDatecreated(Timestamp datecreated) {
+        this.datecreated = datecreated;
+    }
+
+    public Timestamp getDateupdated() {
+        return dateupdated;
+    }
+
+    public void setDateupdated(Timestamp dateupdated) {
+        this.dateupdated = dateupdated;
     }
 }

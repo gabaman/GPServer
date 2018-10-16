@@ -31,8 +31,8 @@ public class GPItem {
     private String attribute8;
 
 
-    private Timestamp dateCreated;
-    private Timestamp dateUpdated;
+    private Timestamp datecreated;
+    private Timestamp dateupdated;
 
     public Map<String,Object> toMap(){
         Map<String, Object> map = new HashMap<>();
@@ -157,19 +157,19 @@ public class GPItem {
         this.attribute8 = attribute8;
     }
 
-    public Timestamp getDateCreated() {
-        return dateCreated;
+    public Timestamp getDatecreated() {
+        return datecreated;
     }
 
-    public void setDateCreated(Timestamp dateCreated) {
-        this.dateCreated = dateCreated;
+    public void setDatecreated(Timestamp datecreated) {
+        this.datecreated = datecreated;
     }
 
-    public Timestamp getDateUpdated() {
-        return dateUpdated;
+    public Timestamp getDateupdated() {
+        return dateupdated;
     }
 
-    public void setDateUpdated(Timestamp dateUpdated) {
-        this.dateUpdated = dateUpdated;
+    public void setDateupdated(Timestamp dateupdated) {
+        this.dateupdated = dateupdated;
     }
 }
