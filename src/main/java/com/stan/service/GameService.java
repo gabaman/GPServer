@@ -5,16 +5,16 @@ import com.stan.dao.ElasticsearchDao;
 import com.stan.mapper.*;
 import com.stan.model.ESResult;
 import com.stan.model.GPResult;
-import com.stan.model.pojo.GPGame;
-import com.stan.model.pojo.GPItem;
-import com.stan.model.pojo.GPType;
-import com.stan.model.pojo.GPWalkthrough;
+import com.stan.model.pojo.*;
 import com.stan.model.vo.ContentResult;
+import com.stan.utils.GPUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class GameService {
@@ -82,16 +82,30 @@ public class GameService {
 
     /**
      * 获取item
-     * @param typeid
+     * @param locId
      * @return
      */
-    public GPItem getItemByTypeId(String typeid){
+    public GPResult getItemByTypeId(String locId){
         Example example = new Example(GPItem.class);
-        example.createCriteria().andEqualTo("typeid",typeid);
+        example.createCriteria().andEqualTo("locId",locId);
         List<GPItem> list = itemMapper.selectByExample(example);
-        return list.get(0);
+
+        if (list.size() < 1 || list == null){
+            return GPResult.build(400,"typeId不正确");
+        }
+
+        Example attributeExample = new Example(GPItemAttribute.class);
+        attributeExample.createCriteria().andEqualTo("typeid",list.get(0).getTypeid());
+        List<GPItemAttribute> attributeList = itemAttributeMapper.selectByExample(example);
+
+
+        GPItem resItem = list.get(0);
+
+        return GPResult.ok(GPUtil.convertItem(resItem,attributeList));
 
     }
+
+
 
     public GPResult getContentList(String typeId) {
 
@@ -137,20 +151,10 @@ public class GameService {
         Example example = new Example(GPWalkthrough.class);
         example.createCriteria().andEqualTo("istext",1).andEqualTo("typeid",type.getId());
         List<GPWalkthrough> list = walkthroughMapper.selectByExample(example);
-        List<GPWalkthrough> temp = new ArrayList<>();
-        int tag = 1;
-        for (int i = 0; i < list.size(); i++) {
-            GPWalkthrough wt = list.get(i);
-            String prefix = type.getTypeprefix().toString();
-            String tagStr = prefix + String.valueOf(tag);
 
-            if (wt.getTypeid().equals(tagStr)) {
-                tag++;
-                System.out.println("tag="+tag);
-                temp.add(wt);
-            }
-        }
-        return temp;
+        return GPUtil.getWalkthroughOne(list);
+
+
     }
 
 }

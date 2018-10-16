@@ -42,11 +42,10 @@ public class GameController {
 
     @RequestMapping(value = "/itemDetail", method = RequestMethod.POST)
     @ResponseBody
-    public GPResult item(HttpServletRequest request, String typeId) {
+    public GPResult item(HttpServletRequest request, String locId) {
 
-        GPItem item = service.getItemByTypeId(typeId);
+        return  service.getItemByTypeId(locId);
 
-        return GPResult.ok(item);
     }
     @RequestMapping(value = "/gameCategory", method = RequestMethod.POST)
     @ResponseBody

@@ -19,6 +19,8 @@ public class GPType {
     private String image;
     private Long gameid;
     private Long isItem;
+    private String searchImage;
+
 
     private Timestamp dateCreated;
     private Timestamp dateUpdated;
@@ -85,5 +87,13 @@ public class GPType {
 
     public void setDateUpdated(Timestamp dateUpdated) {
         this.dateUpdated = dateUpdated;
+    }
+
+    public String getSearchImage() {
+        return searchImage;
+    }
+
+    public void setSearchImage(String searchImage) {
+        this.searchImage = searchImage;
     }
 }

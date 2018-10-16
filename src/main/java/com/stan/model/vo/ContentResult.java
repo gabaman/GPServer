@@ -6,7 +6,7 @@ public class ContentResult {
     private String name;
     private String image;
     private String description;
-    private String locId;
+    private Long locId;
 
     public Long getId() {
         return id;
@@ -40,11 +40,11 @@ public class ContentResult {
         this.description = description;
     }
 
-    public String getLocId() {
+    public Long getLocId() {
         return locId;
     }
 
-    public void setLocId(String locId) {
+    public void setLocId(Long locId) {
         this.locId = locId;
     }
 }

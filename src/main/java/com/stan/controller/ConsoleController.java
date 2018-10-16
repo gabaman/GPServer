@@ -2,6 +2,7 @@ package com.stan.controller;
 
 import com.stan.model.GPResult;
 import com.stan.service.ConsoleService;
+import com.stan.utils.GPUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -11,6 +12,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
+import java.util.Map;
 
 @RequestMapping(value = "/console")
 @Controller
@@ -21,38 +24,73 @@ public class ConsoleController {
 
     @RequestMapping(value = "/replace", method = RequestMethod.POST)
     @ResponseBody
-    public GPResult query(HttpServletRequest request, String key, String replace) {
-        int tag = service.replaceKey(key, replace);
+    public GPResult query(HttpServletRequest request, String key, String replace,Long gameId,Long isItem) {
+        int tag = service.replaceKey(key,replace,gameId,(isItem == 0));
         return GPResult.ok(tag);
     }
 
     @RequestMapping(value = "/finder", method = RequestMethod.POST)
     @ResponseBody
-    public GPResult save(HttpServletRequest request, String key,Long gameId) {
+    public GPResult save(HttpServletRequest request, String key,Long gameId,Long isItem) {
 
-        return GPResult.ok(service.finderModelList(key,gameId));
+        return GPResult.ok(service.finder(key,gameId,(isItem == 0)));
     }
 
-    @RequestMapping(value = "/list", method = RequestMethod.POST)
+    @RequestMapping(value = "/typeList", method = RequestMethod.POST)
     @ResponseBody
-    public GPResult list(HttpServletRequest request, String categoryId) {
+    public GPResult typeList(HttpServletRequest request, Long gameId) {
 
-        return GPResult.ok(service.retrieveData(categoryId));
+        return GPResult.ok(service.typeList(gameId));
+    }
+
+    @RequestMapping(value = "/gameList", method = RequestMethod.POST)
+    @ResponseBody
+    public GPResult gameList(HttpServletRequest request) {
+
+        return GPResult.ok(service.gameList());
+    }
+
+    @RequestMapping(value = "/contentList", method = RequestMethod.POST)
+    @ResponseBody
+    public GPResult contentList(HttpServletRequest request, Long typeId,int pageNum,int pageSize) {
+
+        return GPResult.ok(service.retrieveData(typeId,pageNum,pageSize));
     }
 
 
-    @RequestMapping(value = "/update", method = RequestMethod.POST)
+    @RequestMapping(value = "/itemUpdate", method = RequestMethod.POST)
     @ResponseBody
-    public GPResult update(HttpServletRequest request, ConsoleUpdater updater) {
+    public GPResult itemUpdate(HttpServletRequest request,Long locId) {
 
-        return service.update(updater);
+        Map paramMap = GPUtil.getRequestParamMap(request);
+        return service.itemUpdate(paramMap,locId);
+    }
+
+    /**
+     *
+     * @param request
+     * @param isTitle 如果是title id传typeId 如果是content id传id
+     * @param id
+     * @param text
+     * @return
+     */
+    @RequestMapping(value = "/walkthroughUpdate", method = RequestMethod.POST)
+    @ResponseBody
+    public GPResult walkthroughUpdate(HttpServletRequest request,Long isTitle,Long id,String text) {
+
+        if (isTitle == Long.valueOf(0)){
+            return service.walkthroughUpdateTitle(id,text);
+        }else {
+            return service.walkthroughUpdateContent(id,text);
+        }
+
     }
 
     @RequestMapping(value = "/sync", method = RequestMethod.POST)
     @ResponseBody
-    public GPResult synchron(HttpServletRequest request) {
+    public GPResult synchron(HttpServletRequest request,Long gameId) {
 
-        return service.esSaveAll();
+        return service.esSaveAll(gameId);
     }
 
     @RequestMapping(value = "/upload", method = RequestMethod.POST)

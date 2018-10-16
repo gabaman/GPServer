@@ -18,7 +18,7 @@ public class GPWalkthrough {
 
     private String title;
     private String content;
-    private String locid;
+    private Long locid;
     private String typeid;
     private Long istext;
 
@@ -60,11 +60,11 @@ public class GPWalkthrough {
         this.content = content;
     }
 
-    public String getLocid() {
+    public Long getLocid() {
         return locid;
     }
 
-    public void setLocid(String locid) {
+    public void setLocid(Long locid) {
         this.locid = locid;
     }
 
