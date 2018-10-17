@@ -325,6 +325,18 @@ public class ConsoleService {
         return GPResult.ok(list);
     }
 
+    public GPResult typeAttribute(Long typeId){
+
+
+        Example example = new Example(GPItemAttribute.class);
+        example.createCriteria().andEqualTo("typeid",typeId);
+        List<GPItemAttribute> list = attributeMapper.selectByExample(example);
+        if (list.size()<1||list == null){
+            return GPResult.build(400,"找不到对应的Attribute");
+        }
+        return GPResult.ok(list);
+    }
+
 
     public GPResult gameList(){
 
@@ -360,6 +372,15 @@ public class ConsoleService {
 
 
         GPItem thisItem = itemList.get(0);
+        if (map.containsKey("name")){
+            thisItem.setName(map.get("name"));
+        }
+
+        if (map.containsKey("description")){
+            thisItem.setDescription(map.get("description"));
+        }
+
+
 
         for (GPItemAttribute attribute:attributeList){
             for (Map.Entry<String, String> entry : map.entrySet()) {
@@ -506,24 +527,247 @@ public class ConsoleService {
 
     }
 
-//    public GPResult uploadImageWithTypeId(MultipartFile file, Long typeId) throws Exception {
-//
-//        COSClientUtil util = new COSClientUtil();
-//
-//        if (typeId.startsWith("1")||typeId.startsWith("0")) {
-//            return GPResult.build(400, "不能修改temple和主线的图片");
-//        }
-//        if (!findTypeId(typeId)){
-//            return GPResult.build(400, "未能找到typeId");
-//        }
-//
-//        String name = util.uploadFile2Cos(file,"content/"+typeId+".jpg");
-//        String imgUrl = util.getImgUrl(name);
-//        String[] split = imgUrl.split("\\?");
-//
-//        return GPResult.ok(split[0]);
-//
-//    }
+    public GPResult uploadImage(MultipartFile file,Long id,Long gameId) throws Exception {
+        Example typeExample = new Example(GPType.class);
+        typeExample.createCriteria().andEqualTo("gameid",gameId);
+        List<GPType> typeList = typeMapper.selectByExample(typeExample);
+
+        GPType t = null;
+
+        for (GPType type:typeList){
+            if (gameId.toString().startsWith(type.getTypeprefix().toString())){
+                t = type;
+            }
+        }
+
+        if (t.getIsitem() == 0){
+            return this.itemUploadImage(file,id,gameId);
+        }else {
+            return this.walkthroughUploadImage(file,id,gameId);
+        }
+    }
+    private GPResult walkthroughUploadImage(MultipartFile file, Long id,Long gameId) throws Exception {
+
+        COSClientUtil util = new COSClientUtil();
+
+
+        Example walkthroughExample = new Example(GPWalkthrough.class);
+        walkthroughExample.createCriteria().andEqualTo("id",id);
+        List<GPWalkthrough> walkthroughList = walkthroughMapper.selectByExample(walkthroughExample);
+
+        if (walkthroughList.size() != 1 || walkthroughList == null){
+            return GPResult.build(400,"找不到对应的Walkthrough");
+        }
+
+        GPWalkthrough wt = walkthroughList.get(0);
+
+        if (wt.getIstext()!= 1){
+            return GPResult.build(400,"content不是image");
+
+        }
+
+
+
+        Example gameExample = new Example(GPGame.class);
+        gameExample.createCriteria().andEqualTo("id",gameId);
+        List<GPGame> gameList = gameMapper.selectByExample(gameExample);
+
+        if (gameList.size() != 1 || gameList == null){
+            return GPResult.build(400,"gameId不正确");
+
+        }
+
+
+
+        String[] suffixList =  wt.getContent().split("_");
+        String suffix = suffixList[suffixList.length-1];
+
+        String name = util.uploadFile2Cos(file,gameList.get(0).getImagedoc()+"/"+walkthroughList.get(0).getLocid()+"_"+suffix);
+        String imgUrl = util.getImgUrl(name);
+        String[] split = imgUrl.split("\\?");
+
+        return GPResult.ok(split[0]);
+
+    }
+
+    private GPResult itemUploadImage(MultipartFile file, Long id,Long gameId) throws Exception {
+
+        COSClientUtil util = new COSClientUtil();
+
+
+        Example itemExample = new Example(GPItem.class);
+        itemExample.createCriteria().andEqualTo("id",id);
+        List<GPItem> itemList = itemMapper.selectByExample(itemExample);
+
+        if (itemList.size() != 1 || itemList == null){
+            return GPResult.build(400,"找不到对应的Item");
+
+        }
+
+
+        Example gameExample = new Example(GPGame.class);
+        gameExample.createCriteria().andEqualTo("id",gameId);
+        List<GPGame> gameList = gameMapper.selectByExample(gameExample);
+
+        if (gameList.size() != 1 || gameList == null){
+            return GPResult.build(400,"gameId不正确");
+
+        }
+
+
+        String name = util.uploadFile2Cos(file,gameList.get(0).getImagedoc()+"/"+itemList.get(0).getLocid()+".jpg");
+        String imgUrl = util.getImgUrl(name);
+        String[] split = imgUrl.split("\\?");
+
+        return GPResult.ok(split[0]);
+
+    }
+
+    public GPResult delete(Long id,Long isItem){
+
+        int res = 0;
+
+        if (isItem == 0){
+            Example itemExample = new Example(GPItem.class);
+            itemExample.createCriteria().andEqualTo("id",id);
+            List<GPItem> list = itemMapper.selectByExample(itemExample);
+            if (list.size() != 1 || list == null){
+                return GPResult.build(400,"id不正确");
+            }
+
+            res = itemMapper.delete(list.get(0));
+
+        }else {
+            Example wtExample = new Example(GPWalkthrough.class);
+            wtExample.createCriteria().andEqualTo("id",id);
+            List<GPWalkthrough> list = walkthroughMapper.selectByExample(wtExample);
+            if (list.size() != 1 || list == null){
+                return GPResult.build(400,"id不正确");
+            }
+
+            res = walkthroughMapper.delete(list.get(0));
+        }
+
+        return GPResult.ok(res);
+
+    }
+
+
+    public GPResult addItem(Map<String,String> map,Long typeId,String name,String description,MultipartFile file) throws Exception {
+
+
+        Example example = new Example(GPType.class);
+        example.createCriteria().andEqualTo("typeid",typeId);
+        List<GPType> typeList = typeMapper.selectByExample(example);
+
+        if (typeList.size() < 1 || typeList == null){
+            return GPResult.build(400,"type不正确");
+        }
+
+        Example itemExample = new Example(GPItem.class);
+        itemExample.createCriteria().andEqualTo("typeid",typeId);
+        List<GPItem> itemList = itemMapper.selectByExample(itemExample);
+
+        if (itemList.size() < 1 || itemList == null){
+            return GPResult.build(400,"获取不到item");
+        }
+
+        Long newLocId = GPUtil.getLocId(itemList);
+
+        Example gameExample = new Example(GPGame.class);
+        example.createCriteria().andEqualTo("id",typeList.get(0).getGameid());
+        List<GPGame> gameList = gameMapper.selectByExample(gameExample);
+
+        Example attributeExample = new Example(GPItemAttribute.class);
+        example.createCriteria().andEqualTo("typeid",typeList.get(0).getId());
+        List<GPItemAttribute> attributeList = attributeMapper.selectByExample(example);
+
+
+        GPItem newItem = new GPItem();
+        newItem.setDescription(description);
+        newItem.setName(name);
+        String suffix = gameList.get(0).getImagedoc()+"/"+newLocId+".jpg";
+
+        newItem.setImage(GPUtil.imageUri+suffix);
+
+        for (GPItemAttribute attribute:attributeList){
+            for (Map.Entry<String, String> entry : map.entrySet()) {
+                newItem = this.setGPItem(newItem,attribute,entry.getKey(),entry.getValue());
+            }
+        }
+
+        int result = itemMapper.insertSelective(newItem);
+
+
+        COSClientUtil util = new COSClientUtil();
+
+
+
+
+        String imgName = util.uploadFile2Cos(file,suffix);
+        String imgUrl = util.getImgUrl(name);
+        String[] split = imgUrl.split("\\?");
+
+        return GPResult.ok(split[0]);
+
+    }
+
+    public GPResult addWalkthroughImage(Long locId,Long gameId,MultipartFile image) throws Exception {
+
+        Example gameExample = new Example(GPGame.class);
+        gameExample.createCriteria().andEqualTo("id",gameId);
+        List<GPGame> gameList = gameMapper.selectByExample(gameExample);
+
+        if (gameList.size() != 1 || gameList == null){
+            return GPResult.build(400,"gameId不正确");
+
+        }
+
+
+
+        Example walkthroughExample = new Example(GPWalkthrough.class);
+        walkthroughExample.createCriteria().andEqualTo("locid",locId);
+        List<GPWalkthrough> walkthroughList = walkthroughMapper.selectByExample(walkthroughExample);
+
+        if (walkthroughList.size()<1){
+            return GPResult.build(400,"locId不存在");
+        }
+
+        int tag = 1;
+        for (GPWalkthrough wt:walkthroughList) {
+            if (wt.getIstext() == 1){
+                tag ++;
+            }
+        }
+
+        String suffix = gameList.get(0).getImagedoc()+"/"+locId+"_"+tag+".jpg";
+
+        GPWalkthrough wt = new GPWalkthrough();
+        wt.setTitle(walkthroughList.get(0).getTitle());
+        wt.setContent(GPUtil.imageUri + suffix);
+        wt.setTypeid(walkthroughList.get(0).getTypeid());
+        wt.setLocid(locId);
+        wt.setIstext(Long.valueOf(1));
+
+        walkthroughMapper.insertSelective(wt);
+
+        COSClientUtil util = new COSClientUtil();
+
+
+
+
+        String imgName = util.uploadFile2Cos(image,suffix);
+        String imgUrl = util.getImgUrl(imgName);
+        String[] split = imgUrl.split("\\?");
+
+        return GPResult.ok(split[0]);
+
+    }
+
+    public GPResult addWalkthroughText(Long locId,String content){
+
+    }
+
 
 }
 

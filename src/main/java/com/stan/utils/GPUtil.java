@@ -13,7 +13,7 @@ import java.util.*;
 
 public class GPUtil {
 
-    public static String imageUri = "https://gamepedia-1257100500.cos.ap-shanghai.myqcloud.com/content/";
+    public static String imageUri = "https://gamepedia-1257100500.cos.ap-shanghai.myqcloud.com/";
 
     public static Map convertItem(GPItem resItem, List<GPItemAttribute> attributeList){
         Map res = new HashMap();
@@ -99,5 +99,24 @@ public class GPUtil {
         }
     }
 
+
+    public static Long getLocId(List<GPItem> itemList){
+
+        Integer temp = 0 ;
+
+        for (GPItem item:itemList) {
+
+            Integer current = Integer.valueOf(item.getLocid().toString().substring(item.getTypeid().toString().length()));
+
+            if (current > temp){
+                temp = current;
+            }
+        }
+        temp = temp +1;
+
+        String res = itemList.get(0).getTypeid().toString() + temp.toString();
+
+        return Long.valueOf(temp);
+    }
 
 }

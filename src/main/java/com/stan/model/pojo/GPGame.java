@@ -18,6 +18,7 @@ public class GPGame {
     private String company;
     private String score;
     private String image;
+    private String imagedoc;
 
     private Timestamp datecreated;
     private Timestamp dateupdated;
@@ -85,5 +86,13 @@ public class GPGame {
 
     public void setDateupdated(Timestamp dateupdated) {
         this.dateupdated = dateupdated;
+    }
+
+    public String getImagedoc() {
+        return imagedoc;
+    }
+
+    public void setImagedoc(String imagedoc) {
+        this.imagedoc = imagedoc;
     }
 }
