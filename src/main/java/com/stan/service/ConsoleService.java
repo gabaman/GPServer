@@ -827,5 +827,29 @@ public class ConsoleService {
 
         return GPResult.ok(walkthroughMapper.insertSelective(wt));
     }
+
+    public GPResult updateType(Long typeId,String name,MultipartFile image){
+        Example typeExample = new Example(GPType.class);
+        typeExample.createCriteria().andEqualTo("id", typeId);
+        List<GPType> typeList = typeMapper.selectByExample(typeExample);
+
+        if (typeList.size() <1 || typeList == null){
+            GPResult.build(400,"typeId不正确");
+        }
+
+        int res = 0;
+        if (name != null && !name.equals("")){
+            GPType type = typeList.get(0);
+            type.setTypename(name);
+            res = typeMapper.updateByPrimaryKeySelective(type);
+        }
+        
+        if (image != null){
+
+        }else {
+            return GPResult.ok(res);
+        }
+
+    }
 }
 
