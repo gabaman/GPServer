@@ -33,7 +33,7 @@ public class ESTest {
     @Test
     public void test(){
 //        downloadPicture("https://gamepedia-1257100500.cos.ap-shanghai.myqcloud.com/picture/food.jpg","test.jpg");
-        script.downloadWalkthroughPic();
+//        script.downloadWalkthroughPic();
 
 
     }

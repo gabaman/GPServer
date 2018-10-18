@@ -119,4 +119,22 @@ public class GPUtil {
         return Long.valueOf(temp);
     }
 
+    public static Long getWTLocId(List<GPWalkthrough> walkthroughList){
+
+        Integer temp = 0 ;
+
+        for (GPWalkthrough wt:walkthroughList) {
+
+            Integer current = Integer.valueOf(wt.getLocid().toString().substring(wt.getTypeid().toString().length()));
+
+            if (current > temp){
+                temp = current;
+            }
+        }
+        temp = temp +1;
+
+        String res = walkthroughList.get(0).getTypeid().toString() + temp.toString();
+
+        return Long.valueOf(temp);
+    }
 }

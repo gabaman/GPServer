@@ -19,7 +19,7 @@ public class GPWalkthrough {
     private String title;
     private String content;
     private Long locid;
-    private String typeid;
+    private Long typeid;
     private Long istext;
 
     private Timestamp datecreated;
@@ -68,11 +68,11 @@ public class GPWalkthrough {
         this.locid = locid;
     }
 
-    public String getTypeid() {
+    public Long getTypeid() {
         return typeid;
     }
 
-    public void setTypeid(String typeid) {
+    public void setTypeid(Long typeid) {
         this.typeid = typeid;
     }
 
