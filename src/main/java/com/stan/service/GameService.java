@@ -79,8 +79,7 @@ public class GameService {
 
         Example example = new Example(GPWalkthrough.class);
         example.createCriteria().andEqualTo("locid",locId);
-        AggregateCondition condition = new AggregateCondition();
-        List<GPWalkthrough> list = walkthroughMapper.selectAggregationByExample(example,condition);
+        List<GPWalkthrough> list = walkthroughMapper.selectByExample(example);
 
         return list;
     }

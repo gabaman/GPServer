@@ -828,28 +828,76 @@ public class ConsoleService {
         return GPResult.ok(walkthroughMapper.insertSelective(wt));
     }
 
-//    public GPResult updateType(Long typeId,String name,MultipartFile image){
-//        Example typeExample = new Example(GPType.class);
-//        typeExample.createCriteria().andEqualTo("id", typeId);
-//        List<GPType> typeList = typeMapper.selectByExample(typeExample);
-//
-//        if (typeList.size() <1 || typeList == null){
-//            GPResult.build(400,"typeId不正确");
-//        }
-//
-//        int res = 0;
-//        if (name != null && !name.equals("")){
-//            GPType type = typeList.get(0);
-//            type.setTypename(name);
-//            res = typeMapper.updateByPrimaryKeySelective(type);
-//        }
-//
-//        if (image != null){
-//
-//        }else {
-//            return GPResult.ok(res);
-//        }
-//
-//    }
+
+    public GPResult updateType(Long typeId,String name,MultipartFile image) throws Exception {
+        Example typeExample = new Example(GPType.class);
+        typeExample.createCriteria().andEqualTo("id", typeId);
+        List<GPType> typeList = typeMapper.selectByExample(typeExample);
+
+        if (typeList.size() <1 || typeList == null){
+            GPResult.build(400,"typeId不正确");
+        }
+
+        int res = 0;
+        if (name != null && !name.equals("")){
+
+            GPType type = typeList.get(0);
+            type.setTypename(name);
+            res = typeMapper.updateByPrimaryKeySelective(type);
+        }
+
+        if (image != null){
+            String suffix =  "type/" + typeId.toString() + ".jpg";
+
+            COSClientUtil util = new COSClientUtil();
+
+
+            String img = util.uploadFile2Cos(image, suffix);
+            String imgUrl = util.getImgUrl(img);
+            String[] split = imgUrl.split("\\?");
+
+            return GPResult.ok(split[0]);
+        }
+        return GPResult.ok(res);
+
+    }
+    public GPResult addType(Long gameId,String name,Long isItem,MultipartFile searchImage,MultipartFile image) throws Exception {
+
+        Example gameExample = new Example(GPGame.class);
+        gameExample.createCriteria().andEqualTo("id", gameId);
+        GPGame game = gameMapper.selectOneByExample(gameExample);
+
+
+
+        if (game == null){
+            GPResult.build(400,"typeId不正确");
+        }
+        if (name == null || name.equals("")){
+            GPResult.build(400,"name为空");
+        }
+        if (isItem == null){
+            GPResult.build(400,"isItem为空");
+        }
+        if (image == null){
+            GPResult.build(400,"image未上传");
+        }
+        if (isItem!=0 ){
+            if (searchImage.equals("")&& searchImage == null){
+                GPResult.build(400,"searchImage未上传");
+
+            }
+        }
+
+        GPType type = new GPType();
+        type.setGameid(gameId);
+        type.setIsitem(isItem);
+
+        int v = typeMapper.insertSelective(type);
+        if (v<0){
+            GPResult.build(400,"创建失败");
+        }
+        
+    }
+
 }
 

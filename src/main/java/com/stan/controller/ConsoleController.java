@@ -187,29 +187,26 @@ public class ConsoleController {
     }
 
 
-//    @RequestMapping(value = "/type/update", method = RequestMethod.POST)
-//    @ResponseBody
-//    public GPResult typeUpdate(HttpServletRequest request,Long typeId,) {
-//
-////        Map paramMap = GPUtil.getRequestParamMap(request);
-////        return service.itemUpdate(paramMap,locId);
-//    }
-//
-//
-//    @RequestMapping(value = "/type/add", method = RequestMethod.POST)
-//    @ResponseBody
-//    public GPResult typeUpdate(HttpServletRequest request,Long locId) {
-//
-////        Map paramMap = GPUtil.getRequestParamMap(request);
-////        return service.itemUpdate(paramMap,locId);
-//    }
-//
-//    @RequestMapping(value = "/type/delete", method = RequestMethod.POST)
-//    @ResponseBody
-//    public GPResult typeUpdate(HttpServletRequest request,Long locId) {
-//
-////        Map paramMap = GPUtil.getRequestParamMap(request);
-////        return service.itemUpdate(paramMap,locId);
-//    }
+    @RequestMapping(value = "/type/update", method = RequestMethod.POST)
+    @ResponseBody
+    public GPResult typeUpdate(HttpServletRequest request,String name,Long typeId,@RequestParam("image") MultipartFile image) throws Exception {
+
+        return service.updateType(typeId,name,image);
+    }
+
+
+    @RequestMapping(value = "/type/add", method = RequestMethod.POST)
+    @ResponseBody
+    public GPResult typeUpdate(HttpServletRequest request,Long gameId,String name,@RequestParam("image") MultipartFile image) {
+        return service.addType(gameId,name,image);
+
+    }
+
+    @RequestMapping(value = "/game/add", method = RequestMethod.POST)
+    @ResponseBody
+    public GPResult typeUpdate(HttpServletRequest request,String name,@RequestParam("image") MultipartFile image) {
+        return service.addGame(gameId,name,image);
+
+    }
 
 }
