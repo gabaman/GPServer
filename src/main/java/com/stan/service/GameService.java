@@ -1,6 +1,6 @@
 package com.stan.service;
 
-import com.github.abel533.entity.Example;
+import com.github.pagehelper.PageHelper;
 import com.stan.dao.ElasticsearchDao;
 import com.stan.mapper.*;
 import com.stan.model.ESResult;
@@ -10,6 +10,10 @@ import com.stan.model.vo.ContentResult;
 import com.stan.utils.GPUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import tk.mybatis.mapper.additional.aggregation.AggregateCondition;
+import tk.mybatis.mapper.additional.aggregation.AggregateType;
+import tk.mybatis.mapper.additional.aggregation.AggregationProvider;
+import tk.mybatis.mapper.entity.Example;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -48,7 +52,7 @@ public class GameService {
     public List<GPGame> getGameList() {
 
         Example example = new Example(GPGame.class);
-        example.createCriteria().andIsNull("typeid");
+        example.createCriteria().andIsNotNull("id");
         List<GPGame> list = gameMapper.selectByExample(example);
         return list;
     }
@@ -71,11 +75,12 @@ public class GameService {
      * @param locId
      * @return
      */
-    public List<GPWalkthrough> getWalkthroughByLocId(String locId) {
+    public List<GPWalkthrough> getWalkthroughByLocId(Long locId) {
 
         Example example = new Example(GPWalkthrough.class);
         example.createCriteria().andEqualTo("locid",locId);
-        List<GPWalkthrough> list = walkthroughMapper.selectByExample(example);
+        AggregateCondition condition = new AggregateCondition();
+        List<GPWalkthrough> list = walkthroughMapper.selectAggregationByExample(example,condition);
 
         return list;
     }
@@ -85,7 +90,7 @@ public class GameService {
      * @param locId
      * @return
      */
-    public GPResult getItemByTypeId(String locId){
+    public GPResult getItemByTypeId(Long locId){
         Example example = new Example(GPItem.class);
         example.createCriteria().andEqualTo("locId",locId);
         List<GPItem> list = itemMapper.selectByExample(example);
@@ -107,7 +112,7 @@ public class GameService {
 
 
 
-    public GPResult getContentList(String typeId) {
+    public GPResult getContentList(Long typeId,int pageNum,int pageSize) {
 
         Example typeExample = new Example(GPType.class);
         typeExample.createCriteria().andEqualTo("id",typeId);
@@ -119,14 +124,36 @@ public class GameService {
 
         List<ContentResult> temp = new ArrayList<>();
 
-        if (type.getIsitem() == 1){
+        if (type.getIsitem() == 0){
             Example itemExample = new Example(GPItem.class);
             itemExample.createCriteria().andEqualTo("typeid",type.getId());
+            PageHelper.startPage(pageNum, pageSize);
             List<GPItem> itemRes = itemMapper.selectByExample(itemExample);
+            for (GPItem wt:itemRes){
+                ContentResult content = new ContentResult();
+                content.setId(wt.getId());
+                content.setImage(wt.getImage());
+                content.setDescription("");
+                content.setName(wt.getName());
+                content.setLocId(wt.getLocid());
+                temp.add(content);
+                System.out.println(content.getName());
+
+            }
+
             return GPResult.ok(temp);
 
         }else{
-            List<GPWalkthrough> wtRes = this.getPicOneWalkthrough(type);
+
+            Example wtExample = new Example(GPWalkthrough.class);
+            wtExample.createCriteria().andEqualTo("typeid",type.getId());
+            PageHelper.startPage(pageNum, pageSize);
+            List<GPWalkthrough> wtRes = walkthroughMapper.selectByExample(wtExample);
+//            List<GPWalkthrough> wtRes = this.getPicOneWalkthrough(type);
+            System.out.println(wtRes.size());
+
+
+
             for (GPWalkthrough wt:wtRes){
                 ContentResult content = new ContentResult();
                 content.setId(wt.getId());
@@ -135,26 +162,30 @@ public class GameService {
                 content.setName(wt.getTitle());
                 content.setLocId(wt.getLocid());
                 temp.add(content);
+                System.out.println(content.getId()+"======="+content.getLocId());
+
             }
             return GPResult.ok(temp);
         }
 
     }
 
-    public List<GPWalkthrough> getPicOneWalkthrough(GPType type) {
-
-        if (type.getIsitem() == 0){
-            return null;
-        }
-
-
-        Example example = new Example(GPWalkthrough.class);
-        example.createCriteria().andEqualTo("istext",1).andEqualTo("typeid",type.getId());
-        List<GPWalkthrough> list = walkthroughMapper.selectByExample(example);
-
-        return GPUtil.getWalkthroughOne(list);
-
-
-    }
+//    public List<GPWalkthrough> getPicOneWalkthrough(GPType type) {
+//
+//        if (type.getIsitem() == 0){
+//            return null;
+//        }
+//
+//
+//        Example example = new Example(GPWalkthrough.class);
+//        example.createCriteria().andEqualTo("istext",1).andEqualTo("typeid",type.getId());
+//        example.setDistinct(true);
+//
+//        List<GPWalkthrough> list = walkthroughMapper.selectByExample(example);
+//
+//        return GPUtil.getWalkthroughOne(list);
+//
+//
+//    }
 
 }

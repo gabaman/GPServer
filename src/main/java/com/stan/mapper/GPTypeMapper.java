@@ -1,7 +1,7 @@
 package com.stan.mapper;
 
-import com.github.abel533.mapper.Mapper;
 import com.stan.model.pojo.GPType;
+import tk.mybatis.mapper.common.Mapper;
 
 public interface GPTypeMapper extends Mapper<GPType> {
 }

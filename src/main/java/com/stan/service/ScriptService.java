@@ -1,6 +1,6 @@
 package com.stan.service;
 
-import com.github.abel533.entity.Example;
+import tk.mybatis.mapper.entity.Example;
 import com.stan.mapper.GPItemMapper;
 import com.stan.mapper.GPWalkthroughMapper;
 import com.stan.model.pojo.GPItem;

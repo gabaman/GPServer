@@ -29,6 +29,7 @@ public class MybatisConfiguration {
         // 设置别名包
         sqlSessionFactoryBean.setTypeAliasesPackage("com.stan.model.pojo");
 
+
         return sqlSessionFactoryBean;
 
     }

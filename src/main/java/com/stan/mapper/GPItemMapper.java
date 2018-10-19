@@ -1,7 +1,7 @@
 package com.stan.mapper;
 
-import com.github.abel533.mapper.Mapper;
 import com.stan.model.pojo.GPItem;
+import tk.mybatis.mapper.common.Mapper;
 
 public interface GPItemMapper extends Mapper<GPItem> {
 }

@@ -35,33 +35,33 @@ public class GameController {
 
     @RequestMapping(value = "/walkthrough/detail", method = RequestMethod.POST)
     @ResponseBody
-    public GPResult walkthrough(HttpServletRequest request, String locId) {
+    public GPResult walkthrough(HttpServletRequest request, Long locId) {
 
         return GPResult.ok(service.getWalkthroughByLocId(locId));
     }
 
     @RequestMapping(value = "/item/detail", method = RequestMethod.POST)
     @ResponseBody
-    public GPResult item(HttpServletRequest request, String locId) {
+    public GPResult item(HttpServletRequest request, Long locId) {
 
         return  service.getItemByTypeId(locId);
 
     }
     @RequestMapping(value = "/type/list", method = RequestMethod.POST)
     @ResponseBody
-    public GPResult gameCategory(HttpServletRequest request, String gameId) {
+    public GPResult gameCategory(HttpServletRequest request, Long gameId) {
 
 
 
-        return GPResult.ok(service.getGameCategory(Long.valueOf(gameId)));
+        return GPResult.ok(service.getGameCategory(gameId));
     }
 
     @RequestMapping(value = "/content/list", method = RequestMethod.POST)
     @ResponseBody
-    public GPResult contentList(HttpServletRequest request, String categoryId) {
+    public GPResult contentList(HttpServletRequest request, Long typeId,int pageNum,int pageSize) {
 
 
-        return GPResult.ok(service.getContentList(categoryId));
+        return GPResult.ok(service.getContentList(typeId,pageNum,pageSize));
     }
 
 }

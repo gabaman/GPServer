@@ -187,29 +187,29 @@ public class ConsoleController {
     }
 
 
-    @RequestMapping(value = "/type/update", method = RequestMethod.POST)
-    @ResponseBody
-    public GPResult typeUpdate(HttpServletRequest request,Long typeId,) {
-
-//        Map paramMap = GPUtil.getRequestParamMap(request);
-//        return service.itemUpdate(paramMap,locId);
-    }
-
-
-    @RequestMapping(value = "/type/add", method = RequestMethod.POST)
-    @ResponseBody
-    public GPResult typeUpdate(HttpServletRequest request,Long locId) {
-
-//        Map paramMap = GPUtil.getRequestParamMap(request);
-//        return service.itemUpdate(paramMap,locId);
-    }
-
-    @RequestMapping(value = "/type/delete", method = RequestMethod.POST)
-    @ResponseBody
-    public GPResult typeUpdate(HttpServletRequest request,Long locId) {
-
-//        Map paramMap = GPUtil.getRequestParamMap(request);
-//        return service.itemUpdate(paramMap,locId);
-    }
+//    @RequestMapping(value = "/type/update", method = RequestMethod.POST)
+//    @ResponseBody
+//    public GPResult typeUpdate(HttpServletRequest request,Long typeId,) {
+//
+////        Map paramMap = GPUtil.getRequestParamMap(request);
+////        return service.itemUpdate(paramMap,locId);
+//    }
+//
+//
+//    @RequestMapping(value = "/type/add", method = RequestMethod.POST)
+//    @ResponseBody
+//    public GPResult typeUpdate(HttpServletRequest request,Long locId) {
+//
+////        Map paramMap = GPUtil.getRequestParamMap(request);
+////        return service.itemUpdate(paramMap,locId);
+//    }
+//
+//    @RequestMapping(value = "/type/delete", method = RequestMethod.POST)
+//    @ResponseBody
+//    public GPResult typeUpdate(HttpServletRequest request,Long locId) {
+//
+////        Map paramMap = GPUtil.getRequestParamMap(request);
+////        return service.itemUpdate(paramMap,locId);
+//    }
 
 }
