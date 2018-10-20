@@ -17,22 +17,33 @@ public class GPUtil {
 
     public static Map convertItem(GPItem resItem, List<GPItemAttribute> attributeList){
         Map res = new HashMap();
+
+        System.out.println(attributeList);
+
+
         for (GPItemAttribute attribute:attributeList){
+
+
+
             switch (attribute.getAttributeindex().intValue()){
-                case 0:res.put(attribute.getName(),resItem.getAttribute1());
-                case 1:res.put(attribute.getName(),resItem.getAttribute2());
-                case 2:res.put(attribute.getName(),resItem.getAttribute3());
-                case 3:res.put(attribute.getName(),resItem.getAttribute4());
-                case 4:res.put(attribute.getName(),resItem.getAttribute5());
-                case 5:res.put(attribute.getName(),resItem.getAttribute6());
-                case 6:res.put(attribute.getName(),resItem.getAttribute7());
-                case 7:res.put(attribute.getName(),resItem.getAttribute8());
+                case 0:res.put(attribute.getName(),resItem.getAttribute1());break;
+                case 1:res.put(attribute.getName(),resItem.getAttribute2());break;
+                case 2:res.put(attribute.getName(),resItem.getAttribute3());break;
+                case 3:res.put(attribute.getName(),resItem.getAttribute4());break;
+                case 4:res.put(attribute.getName(),resItem.getAttribute5());break;
+                case 5:res.put(attribute.getName(),resItem.getAttribute6());break;
+                case 6:res.put(attribute.getName(),resItem.getAttribute7());break;
+                case 7:res.put(attribute.getName(),resItem.getAttribute8());break;
+
             }
         }
+
+
         res.put("name",resItem.getName());
         res.put("image",resItem.getImage());
         res.put("typeId",resItem.getTypeid());
         res.put("description",resItem.getDescription());
+
         return res;
     }
 

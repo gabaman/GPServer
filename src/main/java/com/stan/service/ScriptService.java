@@ -28,7 +28,7 @@ public class ScriptService {
 
     public List<GPWalkthrough> getAllWalkthrough(){
         Example example = new Example(GPWalkthrough.class);
-        example.createCriteria().andIsNotNull("id").andEqualTo("istext",1);
+        example.createCriteria().andIsNotNull("id");
         return walkthroughMapper.selectByExample(example);
     }
 
@@ -54,4 +54,17 @@ public class ScriptService {
 //
         }
     }
+
+    public void updater(){
+
+//        GPWalkthrough wt = this.getAllWalkthrough().get(0);
+
+        for (GPWalkthrough wt:this.getAllWalkthrough()){
+            String sql = "UPDATE `gp_walkthrough` SET `title` = '" + wt.getTitle() + "' WHERE `id`  = " + wt.getId() +";";
+
+            System.out.println(sql);
+
+        }
+    }
+
 }

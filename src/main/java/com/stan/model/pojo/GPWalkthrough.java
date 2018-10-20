@@ -21,6 +21,7 @@ public class GPWalkthrough {
     private Long locid;
     private Long typeid;
     private Long istext;
+    private Long isfirst;
 
     private Timestamp datecreated;
     private Timestamp dateupdated;
@@ -98,5 +99,13 @@ public class GPWalkthrough {
 
     public void setDateupdated(Timestamp dateupdated) {
         this.dateupdated = dateupdated;
+    }
+
+    public Long getIsfirst() {
+        return isfirst;
+    }
+
+    public void setIsfirst(Long isfirst) {
+        this.isfirst = isfirst;
     }
 }

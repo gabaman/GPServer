@@ -91,19 +91,18 @@ public class GameService {
      */
     public GPResult getItemByTypeId(Long locId){
         Example example = new Example(GPItem.class);
-        example.createCriteria().andEqualTo("locId",locId);
-        List<GPItem> list = itemMapper.selectByExample(example);
+        example.createCriteria().andEqualTo("locid",locId);
+        GPItem resItem = itemMapper.selectOneByExample(example);
 
-        if (list.size() < 1 || list == null){
+        if (resItem == null){
             return GPResult.build(400,"typeId不正确");
         }
 
         Example attributeExample = new Example(GPItemAttribute.class);
-        attributeExample.createCriteria().andEqualTo("typeid",list.get(0).getTypeid());
-        List<GPItemAttribute> attributeList = itemAttributeMapper.selectByExample(example);
+        attributeExample.createCriteria().andEqualTo("typeid",resItem.getTypeid());
+        List<GPItemAttribute> attributeList = itemAttributeMapper.selectByExample(attributeExample);
 
 
-        GPItem resItem = list.get(0);
 
         return GPResult.ok(GPUtil.convertItem(resItem,attributeList));
 

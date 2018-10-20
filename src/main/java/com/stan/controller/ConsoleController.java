@@ -76,14 +76,14 @@ public class ConsoleController {
     /**
      * 更新攻略的标题
      * @param request
-     * @param typeId
+     * @param lodId
      * @param text
      * @return
      */
     @RequestMapping(value = "/walkthrough/update/title", method = RequestMethod.POST)
     @ResponseBody
-    public GPResult updateWalkthroughTitle(HttpServletRequest request,Long typeId,String text) {
-        return service.walkthroughUpdateTitle(typeId,text);
+    public GPResult updateWalkthroughTitle(HttpServletRequest request,Long lodId,String text) {
+        return service.walkthroughUpdateTitle(lodId,text);
 
 
     }
@@ -132,9 +132,9 @@ public class ConsoleController {
 
     @RequestMapping(value = "/item/delete", method = RequestMethod.POST)
     @ResponseBody
-    public GPResult deleteItem(HttpServletRequest request,  Long id) throws Exception {
+    public GPResult deleteItem(HttpServletRequest request,  Long locId) throws Exception {
 
-        return service.deleteItem(id);
+        return service.deleteItem(locId);
     }
     @RequestMapping(value = "/walkthrough/delete/byId", method = RequestMethod.POST)
     @ResponseBody
@@ -150,7 +150,7 @@ public class ConsoleController {
     }
 
 
-    @RequestMapping(value = "/item/item", method = RequestMethod.POST)
+    @RequestMapping(value = "/item/add", method = RequestMethod.POST)
     @ResponseBody
     public GPResult addItem(HttpServletRequest request,Long typeId,String name,String description,@RequestParam("image") MultipartFile image) throws Exception {
 
@@ -197,16 +197,11 @@ public class ConsoleController {
 
     @RequestMapping(value = "/type/add", method = RequestMethod.POST)
     @ResponseBody
-    public GPResult typeUpdate(HttpServletRequest request,Long gameId,String name,@RequestParam("image") MultipartFile image) {
-        return service.addType(gameId,name,image);
+    public GPResult typeUpdate(HttpServletRequest request,Long gameId,Long isItem,String name,@RequestParam("searchImage") MultipartFile searchImage,@RequestParam("image") MultipartFile image) throws Exception {
+        return service.addType(gameId,name,isItem,searchImage,image);
 
     }
 
-    @RequestMapping(value = "/game/add", method = RequestMethod.POST)
-    @ResponseBody
-    public GPResult typeUpdate(HttpServletRequest request,String name,@RequestParam("image") MultipartFile image) {
-        return service.addGame(gameId,name,image);
 
-    }
 
 }
