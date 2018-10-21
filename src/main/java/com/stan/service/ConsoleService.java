@@ -484,7 +484,7 @@ public class ConsoleService {
 
     private List<Map> esSaveAllItem(Long typeId) {
         Example example = new Example(GPItem.class);
-        example.createCriteria().andEqualTo("typed", typeId);
+        example.createCriteria().andEqualTo("typeid", typeId);
         List<GPItem> itemList = itemMapper.selectByExample(example);
         List<Map> temp = new ArrayList<>();
 
@@ -503,11 +503,11 @@ public class ConsoleService {
 
     private List<Map> esSaveAllWalkthrought(Long typeId, String imageName) {
         Example example = new Example(GPWalkthrough.class);
-        example.createCriteria().andEqualTo("typeId", typeId).andEqualTo("istext", 0);
-        List<GPWalkthrough> wtlist = walkthroughMapper.selectByExample(example);
+        example.createCriteria().andEqualTo("typeid", typeId).andEqualTo("istext", 0).andEqualTo("isfirst",0);
+        List<GPWalkthrough> resList = walkthroughMapper.selectByExample(example);
 
         List<Map> temp = new ArrayList<>();
-        List<GPWalkthrough> resList = GPUtil.getWalkthroughOne(wtlist);
+//        List<GPWalkthrough> resList = GPUtil.getWalkthroughOne(wtlist);
 
         for (GPWalkthrough wt : resList) {
             Boolean isSuccess = esDao.saveWalkthrough(wt, imageName);

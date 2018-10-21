@@ -38,17 +38,15 @@ public class ElasticsearchDao {
         BulkRequestBuilder bulkRequestBuilder = transportClient.prepareBulk();
 
         Map tmp = walkthrough.toMap(image);
-        tmp.put("isItem",1);
-        tmp.put("image", image);
 
-        IndexRequest indexRequest = transportClient.prepareIndex(gameContentIndex,gameContentType,walkthrough.getTypeid().toString()).setSource(tmp).request();
+        IndexRequest indexRequest = transportClient.prepareIndex(gameContentIndex,gameContentType,walkthrough.getLocid().toString()).setSource(tmp).request();
         bulkRequestBuilder.add(indexRequest);
         BulkResponse bulkResponse = bulkRequestBuilder.execute().actionGet();
         if (bulkResponse.hasFailures()) {
-            System.out.println("批量创建索引错误！");
+            System.out.println("create index wrong！");
             return false;
         }
-        System.out.println("批量创建索引成功");
+        System.out.println("create index corrent！");
         return true;
 
     }
@@ -58,16 +56,16 @@ public class ElasticsearchDao {
         BulkRequestBuilder bulkRequestBuilder = transportClient.prepareBulk();
 
         Map tmp = item.toMap();
-        tmp.put("isItem",0);
-        IndexRequest   indexRequest = transportClient.prepareIndex(gameContentIndex,gameContentType,item.getTypeid().toString()).setSource(tmp).request();
+
+        IndexRequest   indexRequest = transportClient.prepareIndex(gameContentIndex,gameContentType,item.getLocid().toString()).setSource(tmp).request();
 
         bulkRequestBuilder.add(indexRequest);
         BulkResponse bulkResponse = bulkRequestBuilder.execute().actionGet();
         if (bulkResponse.hasFailures()) {
-            System.out.println("批量创建索引错误！");
+            System.out.println("create index wrong！");
             return false;
         }
-        System.out.println("批量创建索引成功");
+        System.out.println("create index corrent！");
         return true;
 
     }

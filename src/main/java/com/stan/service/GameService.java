@@ -144,10 +144,9 @@ public class GameService {
         }else{
 
             Example wtExample = new Example(GPWalkthrough.class);
-            wtExample.createCriteria().andEqualTo("typeid",type.getId());
+            wtExample.createCriteria().andEqualTo("typeid",type.getId()).andEqualTo("isfirst",0);
             PageHelper.startPage(pageNum, pageSize);
             List<GPWalkthrough> wtRes = walkthroughMapper.selectByExample(wtExample);
-//            List<GPWalkthrough> wtRes = this.getPicOneWalkthrough(type);
             System.out.println(wtRes.size());
 
 

@@ -33,6 +33,8 @@ public class GPWalkthrough {
         map.put("image", image);
         map.put("locId", locid);
         map.put("typeId",typeid);
+        map.put("isItem",1);
+
         return map;
     }
 
