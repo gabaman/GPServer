@@ -127,7 +127,7 @@ public class GPUtil {
 
         String res = itemList.get(0).getTypeid().toString() + temp.toString();
 
-        return Long.valueOf(temp);
+        return Long.valueOf(res);
     }
 
     public static Long getWTLocId(List<GPWalkthrough> walkthroughList){
@@ -146,6 +146,6 @@ public class GPUtil {
 
         String res = walkthroughList.get(0).getTypeid().toString() + temp.toString();
 
-        return Long.valueOf(temp);
+        return Long.valueOf(res);
     }
 }

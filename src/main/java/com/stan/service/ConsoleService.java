@@ -564,6 +564,8 @@ public class ConsoleService {
         String imgUrl = util.getImgUrl(name);
         String[] split = imgUrl.split("\\?");
 
+        util.destory();
+
         return GPResult.ok(split[0]);
 
     }
@@ -601,6 +603,8 @@ public class ConsoleService {
         String imgUrl = util.getImgUrl(name);
         String[] split = imgUrl.split("\\?");
 
+        util.destory();
+
         return GPResult.ok(split[0]);
 
     }
@@ -609,12 +613,33 @@ public class ConsoleService {
 
         Example wtExample = new Example(GPWalkthrough.class);
         wtExample.createCriteria().andEqualTo("id", id);
-        List<GPWalkthrough> list = walkthroughMapper.selectByExample(wtExample);
-        if (list.size() != 1 || list == null) {
+        GPWalkthrough wt = walkthroughMapper.selectOneByExample(wtExample);
+        if (wt == null) {
             return GPResult.build(400, "id不正确");
         }
 
-        int res = walkthroughMapper.delete(list.get(0));
+        Example locExample = new Example(GPWalkthrough.class);
+        locExample.createCriteria().andEqualTo("locid", wt.getLocid());
+        locExample.orderBy("id").asc();
+        List<GPWalkthrough> wtList = walkthroughMapper.selectByExample(locExample);
+
+        int res = 0;
+
+        if (wt.getIsfirst() == 0){
+            if (wtList.size()<2){
+                res = walkthroughMapper.delete(wt);
+            }else {
+                GPWalkthrough upWT = wtList.get(1);
+                upWT.setIsfirst(Long.valueOf(0));
+                walkthroughMapper.updateByPrimaryKeySelective(upWT);
+
+                res = walkthroughMapper.delete(wt);
+            }
+        }else {
+            res = walkthroughMapper.delete(wt);
+        }
+
+
 
         return GPResult.ok(res);
 
@@ -636,14 +661,17 @@ public class ConsoleService {
         Example wtExample = new Example(GPWalkthrough.class);
         wtExample.createCriteria().andEqualTo("locid", locId);
         List<GPWalkthrough> list = walkthroughMapper.selectByExample(wtExample);
-        if (list.size() != 1 || list == null) {
-            return GPResult.build(400, "id不正确");
+        if (list.size() < 1 || list == null) {
+            return GPResult.build(400, "locId不正确");
         }
-        int res = 0;
-        for (GPWalkthrough wt:list){
-            res = res + walkthroughMapper.delete(wt);
 
-        }
+        int res = walkthroughMapper.deleteByExample(wtExample);
+
+//        int res = 0;
+//        for (GPWalkthrough wt:list){
+//            res = res + walkthroughMapper.delete(wt);
+//
+//        }
 
         return GPResult.ok(res);
 
@@ -654,7 +682,7 @@ public class ConsoleService {
 
 
         Example example = new Example(GPType.class);
-        example.createCriteria().andEqualTo("typeid", typeId);
+        example.createCriteria().andEqualTo("id", typeId);
         List<GPType> typeList = typeMapper.selectByExample(example);
 
         if (typeList.size() < 1 || typeList == null) {
@@ -672,17 +700,19 @@ public class ConsoleService {
         Long newLocId = GPUtil.getLocId(itemList);
 
         Example gameExample = new Example(GPGame.class);
-        example.createCriteria().andEqualTo("id", typeList.get(0).getGameid());
+        gameExample.createCriteria().andEqualTo("id", typeList.get(0).getGameid());
         List<GPGame> gameList = gameMapper.selectByExample(gameExample);
 
         Example attributeExample = new Example(GPItemAttribute.class);
-        example.createCriteria().andEqualTo("typeid", typeList.get(0).getId());
-        List<GPItemAttribute> attributeList = attributeMapper.selectByExample(example);
+        attributeExample.createCriteria().andEqualTo("typeid", typeList.get(0).getId());
+        List<GPItemAttribute> attributeList = attributeMapper.selectByExample(attributeExample);
 
 
         GPItem newItem = new GPItem();
         newItem.setDescription(description);
         newItem.setName(name);
+        newItem.setLocid(newLocId);
+        newItem.setTypeid(typeId);
         String suffix = gameList.get(0).getImagedoc() + "/" + newLocId + ".jpg";
 
         newItem.setImage(GPUtil.imageUri + suffix);
@@ -693,7 +723,7 @@ public class ConsoleService {
             }
         }
 
-        int result = itemMapper.insertSelective(newItem);
+
 
 
         COSClientUtil util = new COSClientUtil();
@@ -703,7 +733,11 @@ public class ConsoleService {
         String imgUrl = util.getImgUrl(name);
         String[] split = imgUrl.split("\\?");
 
-        return GPResult.ok(split[0]);
+        util.destory();
+
+        int result = itemMapper.insertSelective(newItem);
+
+        return GPResult.ok(result);
 
     }
 
@@ -714,13 +748,16 @@ public class ConsoleService {
         walkthroughExample.createCriteria().andEqualTo("locid", locId);
         List<GPWalkthrough> walkthroughList = walkthroughMapper.selectByExample(walkthroughExample);
 
+
         if (walkthroughList.size() < 1) {
             return GPResult.build(400, "locId不存在");
         }
 
         Example typeExample = new Example(GPType.class);
-        typeExample.createCriteria().andEqualTo("id", walkthroughList.get(0));
+        typeExample.createCriteria().andEqualTo("id", walkthroughList.get(0).getTypeid());
         List<GPType> typeList = typeMapper.selectByExample(typeExample);
+
+
 
 
         Example gameExample = new Example(GPGame.class);
@@ -732,6 +769,8 @@ public class ConsoleService {
 
         }
 
+
+
         int tag = 1;
         for (GPWalkthrough wt : walkthroughList) {
             if (wt.getIstext() == 1) {
@@ -741,15 +780,6 @@ public class ConsoleService {
 
         String suffix = gameList.get(0).getImagedoc() + "/" + locId + "_" + tag + ".jpg";
 
-        GPWalkthrough wt = new GPWalkthrough();
-        wt.setTitle(walkthroughList.get(0).getTitle());
-        wt.setContent(GPUtil.imageUri + suffix);
-        wt.setTypeid(walkthroughList.get(0).getTypeid());
-        wt.setLocid(locId);
-        wt.setIstext(Long.valueOf(1));
-
-        walkthroughMapper.insertSelective(wt);
-
         COSClientUtil util = new COSClientUtil();
 
 
@@ -757,7 +787,24 @@ public class ConsoleService {
         String imgUrl = util.getImgUrl(imgName);
         String[] split = imgUrl.split("\\?");
 
-        return GPResult.ok(split[0]);
+        util.destory();
+
+        GPWalkthrough wt = new GPWalkthrough();
+        wt.setTitle(walkthroughList.get(0).getTitle());
+        wt.setContent(GPUtil.imageUri + suffix);
+        wt.setTypeid(walkthroughList.get(0).getTypeid());
+        wt.setLocid(locId);
+        wt.setIstext(Long.valueOf(1));
+        wt.setIsfirst(Long.valueOf(1));
+
+
+
+        int res= walkthroughMapper.insertSelective(wt);
+
+
+
+
+        return GPResult.ok(res);
 
     }
 //
@@ -782,14 +829,13 @@ public class ConsoleService {
 
     public GPResult addNewWalkthroughtLoc(Long typeId, String content, String title) {
         Example typeExample = new Example(GPType.class);
-        typeExample.createCriteria().andEqualTo("typeid", typeId);
-        List<GPType> typeList = typeMapper.selectByExample(typeExample);
+        typeExample.createCriteria().andEqualTo("id", typeId);
+        GPType currentType = typeMapper.selectOneByExample(typeExample);
 
-        if (typeList.size() < 1 || typeList == null) {
+        if (currentType == null) {
             return GPResult.build(400, "找不到对应type");
         }
 
-        GPType currentType = typeList.get(0);
 
 
         Example wtExample = new Example(GPWalkthrough.class);
@@ -804,6 +850,7 @@ public class ConsoleService {
         wt.setTypeid(currentType.getId());
         wt.setLocid(newLocId);
         wt.setIstext(Long.valueOf(0));
+        wt.setIsfirst(Long.valueOf(0));
 
 
         return GPResult.ok(walkthroughMapper.insertSelective(wt));
@@ -826,6 +873,8 @@ public class ConsoleService {
         wt.setTypeid(walkthroughList.get(0).getTypeid());
         wt.setLocid(locId);
         wt.setIstext(Long.valueOf(0));
+        wt.setIsfirst(Long.valueOf(1));
+
 
         return GPResult.ok(walkthroughMapper.insertSelective(wt));
     }
@@ -841,13 +890,6 @@ public class ConsoleService {
         }
 
         int res = 0;
-        if (name != null && !name.equals("")){
-
-            GPType type = typeList.get(0);
-            type.setTypename(name);
-            res = typeMapper.updateByPrimaryKeySelective(type);
-        }
-
         if (image != null){
             String suffix =  "type/" + typeId.toString() + ".jpg";
 
@@ -858,8 +900,20 @@ public class ConsoleService {
             String imgUrl = util.getImgUrl(img);
             String[] split = imgUrl.split("\\?");
 
-            return GPResult.ok(split[0]);
+            util.destory();
+
+
         }
+
+        if (name != null && !name.equals("")){
+
+            GPType type = typeList.get(0);
+            type.setTypename(name);
+            res = typeMapper.updateByPrimaryKeySelective(type);
+        }
+
+
+
         return GPResult.ok(res);
 
     }
@@ -910,11 +964,14 @@ public class ConsoleService {
         type.setTypeprefix(type.getId());
 
         String imgSuffix =  "type/" + type.getId().toString() + ".jpg";
-        String searchSuffix =  "searchImage/" + type.getTypename() + ".jpg";
+        String searchSuffix = "";
+        if (isItem!=0 ){
+            searchSuffix =  "searchImage/" + type.getTypename() + ".jpg";
+
+        }
 
         type.setImage(GPUtil.imageUri + imgSuffix);
         type.setSearchimage(GPUtil.imageUri + searchSuffix);
-        typeMapper.updateByPrimaryKeySelective(type);
 
         COSClientUtil util = new COSClientUtil();
 
@@ -933,7 +990,12 @@ public class ConsoleService {
         String[] split = imgUrl.split("\\?");
         res = res + split[0] ;
 
-        return GPResult.ok(res);
+        util.destory();
+
+        int result = typeMapper.updateByPrimaryKeySelective(type);
+
+
+        return GPResult.ok(result);
     }
 
 

@@ -36,7 +36,9 @@ public class ESTest {
     }
 
     @Test
-    public void test(){
+    public void test() throws Exception {
+
+//        console.addWalkthroughImage(Long.valueOf(100126),null);
 
 //        console.walkthroughUpdateTitle(Long.valueOf(10011),"第一座塔");
 

@@ -165,7 +165,7 @@ public class ConsoleController {
         return service.addWalkthroughImage(locId,image);
     }
 
-    @RequestMapping(value = "/walkthrough/add/content", method = RequestMethod.POST)
+    @RequestMapping(value = "/walkthrough/add/newLoc", method = RequestMethod.POST)
     @ResponseBody
     public GPResult addWalkthroughContent(HttpServletRequest request,Long typeId,String content,String title) {
 
@@ -179,7 +179,7 @@ public class ConsoleController {
      * @param content
      * @return
      */
-    @RequestMapping(value = "/walkthrough/add/newloc", method = RequestMethod.POST)
+    @RequestMapping(value = "/walkthrough/add/content", method = RequestMethod.POST)
     @ResponseBody
     public GPResult addWalkthroughNew(HttpServletRequest request,Long locId,String content) {
 
@@ -197,7 +197,7 @@ public class ConsoleController {
 
     @RequestMapping(value = "/type/add", method = RequestMethod.POST)
     @ResponseBody
-    public GPResult typeUpdate(HttpServletRequest request,Long gameId,Long isItem,String name,@RequestParam("searchImage") MultipartFile searchImage,@RequestParam("image") MultipartFile image) throws Exception {
+    public GPResult typeUpdate(HttpServletRequest request,Long gameId,Long isItem,String name,@RequestParam(value = "searchImage",required = false) MultipartFile searchImage,@RequestParam("image") MultipartFile image) throws Exception {
         return service.addType(gameId,name,isItem,searchImage,image);
 
     }
