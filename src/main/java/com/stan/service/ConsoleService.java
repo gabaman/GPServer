@@ -966,7 +966,7 @@ public class ConsoleService {
         String imgSuffix =  "type/" + type.getId().toString() + ".jpg";
         String searchSuffix = "";
         if (isItem!=0 ){
-            searchSuffix =  "searchImage/" + type.getTypename() + ".jpg";
+            searchSuffix =  "searchImage/" + type.getId() + ".jpg";
 
         }
 
