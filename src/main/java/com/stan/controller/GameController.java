@@ -58,10 +58,10 @@ public class GameController {
 
     @RequestMapping(value = "/content/list", method = RequestMethod.POST)
     @ResponseBody
-    public GPResult contentList(HttpServletRequest request, Long typeId,int pageNum,int pageSize) {
+    public GPResult contentList(HttpServletRequest request, Long typeId) {
 
 
-        return GPResult.ok(service.getContentList(typeId,pageNum,pageSize));
+        return service.getContentList(typeId);
     }
 
 }

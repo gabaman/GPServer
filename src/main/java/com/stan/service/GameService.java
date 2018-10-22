@@ -110,7 +110,7 @@ public class GameService {
 
 
 
-    public GPResult getContentList(Long typeId,int pageNum,int pageSize) {
+    public GPResult getContentList(Long typeId) {
 
         Example typeExample = new Example(GPType.class);
         typeExample.createCriteria().andEqualTo("id",typeId);
@@ -125,7 +125,6 @@ public class GameService {
         if (type.getIsitem() == 0){
             Example itemExample = new Example(GPItem.class);
             itemExample.createCriteria().andEqualTo("typeid",type.getId());
-            PageHelper.startPage(pageNum, pageSize);
             List<GPItem> itemRes = itemMapper.selectByExample(itemExample);
             for (GPItem wt:itemRes){
                 ContentResult content = new ContentResult();
@@ -134,6 +133,7 @@ public class GameService {
                 content.setDescription("");
                 content.setName(wt.getName());
                 content.setLocId(wt.getLocid());
+                content.setIsitem(type.getIsitem());
                 temp.add(content);
                 System.out.println(content.getName());
 
@@ -145,19 +145,19 @@ public class GameService {
 
             Example wtExample = new Example(GPWalkthrough.class);
             wtExample.createCriteria().andEqualTo("typeid",type.getId()).andEqualTo("isfirst",0);
-            PageHelper.startPage(pageNum, pageSize);
             List<GPWalkthrough> wtRes = walkthroughMapper.selectByExample(wtExample);
-            System.out.println(wtRes.size());
+
 
 
 
             for (GPWalkthrough wt:wtRes){
                 ContentResult content = new ContentResult();
                 content.setId(wt.getId());
-                content.setImage(wt.getContent());
+                content.setImage(type.getSearchimage());
                 content.setDescription("");
                 content.setName(wt.getTitle());
                 content.setLocId(wt.getLocid());
+                content.setIsitem(type.getIsitem());
                 temp.add(content);
                 System.out.println(content.getId()+"======="+content.getLocId());
 

@@ -38,30 +38,44 @@ public class ConsoleController {
 
     @RequestMapping(value = "/type/list", method = RequestMethod.POST)
     @ResponseBody
-    public GPResult typeList(HttpServletRequest request, Long gameId) {
+    public GPResult typeList(HttpServletRequest request, Long gameId,Long isItem) {
 
-        return GPResult.ok(service.typeList(gameId));
+        return service.typeList(gameId,isItem);
     }
 
     @RequestMapping(value = "/typeattribute/list", method = RequestMethod.POST)
     @ResponseBody
     public GPResult typeAttribute(HttpServletRequest request,Long typeId){
 
-        return GPResult.ok(service.typeAttribute(typeId));
+        return service.typeAttribute(typeId);
     }
 
     @RequestMapping(value = "/game/list", method = RequestMethod.POST)
     @ResponseBody
     public GPResult gameList(HttpServletRequest request) {
 
-        return GPResult.ok(service.gameList());
+        return service.gameList();
     }
 
-    @RequestMapping(value = "/content/list", method = RequestMethod.POST)
+    @RequestMapping(value = "/item/list", method = RequestMethod.POST)
     @ResponseBody
-    public GPResult contentList(HttpServletRequest request, Long typeId,int pageNum,int pageSize) {
+    public GPResult itemList(HttpServletRequest request, Long typeId,int pageNum,int pageSize) {
 
-        return GPResult.ok(service.retrieveData(typeId,pageNum,pageSize));
+        return service.itemData(typeId,pageNum,pageSize);
+    }
+
+    @RequestMapping(value = "/walkthrough/list", method = RequestMethod.POST)
+    @ResponseBody
+    public GPResult walkthroughList(HttpServletRequest request, Long typeId,int pageNum,int pageSize) {
+
+        return service.walkthroughData(typeId,pageNum,pageSize);
+    }
+
+    @RequestMapping(value = "/walkthrough/detail", method = RequestMethod.POST)
+    @ResponseBody
+    public GPResult walkthroughDetail(HttpServletRequest request, Long locId) {
+
+        return service.walkthroughDetail(locId);
     }
 
 
@@ -202,6 +216,18 @@ public class ConsoleController {
 
     }
 
+    @RequestMapping(value = "/typeattribute/add", method = RequestMethod.POST)
+    @ResponseBody
+    public GPResult typeAttributeAdd(HttpServletRequest request,Long typeId,String name,Long searchable){
 
+        return service.addTypeAttribute(typeId,name,searchable);
+    }
+
+    @RequestMapping(value = "/typeattribute/update", method = RequestMethod.POST)
+    @ResponseBody
+    public GPResult typeAttributeUpdate(HttpServletRequest request,Long typeId,String name,Long attributeIndex){
+
+        return service.updateTypeAttribute(typeId,name,attributeIndex);
+    }
 
 }

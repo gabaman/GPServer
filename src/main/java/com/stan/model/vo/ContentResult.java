@@ -6,6 +6,7 @@ public class ContentResult {
     private String name;
     private String image;
     private String description;
+    private Long isitem;
     private Long locId;
 
     public Long getId() {
@@ -46,5 +47,14 @@ public class ContentResult {
 
     public void setLocId(Long locId) {
         this.locId = locId;
+    }
+
+
+    public Long getIsitem() {
+        return isitem;
+    }
+
+    public void setIsitem(Long isitem) {
+        this.isitem = isitem;
     }
 }
