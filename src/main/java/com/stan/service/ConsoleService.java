@@ -1,5 +1,7 @@
 package com.stan.service;
 
+import org.json.JSONException;
+import org.springframework.transaction.annotation.Transactional;
 import tk.mybatis.mapper.entity.Example;
 import com.github.pagehelper.PageHelper;
 import com.stan.dao.ElasticsearchDao;
@@ -292,7 +294,7 @@ public class ConsoleService {
 
     }
 
-    public GPResult itemData(Long typeId, int pageNum, int pageSize) {
+    public GPResult itemData(Long typeId, int pageNum, int pageSize) throws JSONException {
 
         Example typeExample = new Example(GPType.class);
         typeExample.createCriteria().andEqualTo("id", typeId).andEqualTo("isitem",0);
@@ -312,9 +314,10 @@ public class ConsoleService {
         List<GPItem> list = itemMapper.selectByExample(example);
 
 
+
         List<Map> res = new ArrayList<>();
         for (GPItem item : list) {
-            Map map = GPUtil.convertItem(item, attributeList);
+            Map map = GPUtil.convertItemWithJSON(item, attributeList);
             res.add(map);
         }
 
@@ -483,7 +486,11 @@ public class ConsoleService {
 
     }
 
+    @Transactional
     public GPResult walkthroughUpdateTitle(Long locId, String title) {
+        if (locId == null || title == null){
+            return GPResult.build(500,"缺少参数");
+        }
         Example example = new Example(GPWalkthrough.class);
         example.createCriteria().andEqualTo("locid", locId);
         List<GPWalkthrough> walkthroughList = walkthroughMapper.selectByExample(example);
@@ -492,15 +499,17 @@ public class ConsoleService {
         }
 
         int tag = 0;
+        System.out.println(walkthroughList.size());
         for (GPWalkthrough wt : walkthroughList) {
-
             wt.setTitle(title);
-            tag = tag + walkthroughMapper.updateByPrimaryKeySelective(wt);
+            int t = walkthroughMapper.updateByPrimaryKeySelective(wt);
+            tag = tag + t;
         }
 
         return GPResult.ok(tag);
 
     }
+
 
     public GPResult esSaveAll(Long gameId) {
         Example example = new Example(GPType.class);

@@ -8,11 +8,13 @@ com/stan/config/MapperConfiguration.class
 com/stan/utils/GPUtil.class
 com/stan/GPApplication.class
 com/stan/model/vo/ContentResult.class
+com/stan/filter/RestFilter.class
 com/stan/mapper/GPTypeMapper.class
 com/stan/mapper/GPWalkthroughMapper.class
 com/stan/controller/GameController.class
 com/stan/service/ScriptService.class
 com/stan/service/GameService.class
+com/stan/config/FilterConfig.class
 com/stan/model/vo/FinderResult.class
 com/stan/config/ESConfiguration.class
 com/stan/mapper/GPItemAttributeMapper.class

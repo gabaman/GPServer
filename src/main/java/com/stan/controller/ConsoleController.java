@@ -3,6 +3,7 @@ package com.stan.controller;
 import com.stan.model.GPResult;
 import com.stan.service.ConsoleService;
 import com.stan.utils.GPUtil;
+import org.json.JSONException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -59,7 +60,7 @@ public class ConsoleController {
 
     @RequestMapping(value = "/item/list", method = RequestMethod.POST)
     @ResponseBody
-    public GPResult itemList(HttpServletRequest request, Long typeId,int pageNum,int pageSize) {
+    public GPResult itemList(HttpServletRequest request, Long typeId,int pageNum,int pageSize) throws JSONException {
 
         return service.itemData(typeId,pageNum,pageSize);
     }
@@ -96,8 +97,8 @@ public class ConsoleController {
      */
     @RequestMapping(value = "/walkthrough/update/title", method = RequestMethod.POST)
     @ResponseBody
-    public GPResult updateWalkthroughTitle(HttpServletRequest request,Long lodId,String text) {
-        return service.walkthroughUpdateTitle(lodId,text);
+    public GPResult updateWalkthroughTitle(HttpServletRequest request,Long locId,String text) {
+        return service.walkthroughUpdateTitle(locId,text);
 
 
     }

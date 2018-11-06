@@ -38,6 +38,8 @@ public class ESTest {
     @Test
     public void test() throws Exception {
 
+        console.walkthroughUpdateTitle(Long.valueOf(10001),"第二座");
+
 //        console.addWalkthroughImage(Long.valueOf(100126),null);
 
 //        console.walkthroughUpdateTitle(Long.valueOf(10011),"第一座塔");

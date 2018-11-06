@@ -4,6 +4,8 @@ import com.stan.model.pojo.GPItem;
 import com.stan.model.pojo.GPItemAttribute;
 import com.stan.model.pojo.GPType;
 import com.stan.model.pojo.GPWalkthrough;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.*;
@@ -15,7 +17,52 @@ public class GPUtil {
 
     public static String imageUri = "https://gamepedia-1257100500.cos.ap-shanghai.myqcloud.com/";
 
-    public static Map convertItem(GPItem resItem, List<GPItemAttribute> attributeList){
+    public static Map convertItemWithJSON(GPItem resItem, List<GPItemAttribute> attributeList) throws JSONException {
+        Map res = new HashMap();
+
+        System.out.println(attributeList);
+
+        JSONObject json = new JSONObject();
+
+        for (GPItemAttribute attribute:attributeList){
+
+
+
+//            switch (attribute.getAttributeindex().intValue()){
+//                case 0:res.put(attribute.getName(),resItem.getAttribute1());break;
+//                case 1:res.put(attribute.getName(),resItem.getAttribute2());break;
+//                case 2:res.put(attribute.getName(),resItem.getAttribute3());break;
+//                case 3:res.put(attribute.getName(),resItem.getAttribute4());break;
+//                case 4:res.put(attribute.getName(),resItem.getAttribute5());break;
+//                case 5:res.put(attribute.getName(),resItem.getAttribute6());break;
+//                case 6:res.put(attribute.getName(),resItem.getAttribute7());break;
+//                case 7:res.put(attribute.getName(),resItem.getAttribute8());break;
+//
+//            }
+            switch (attribute.getAttributeindex().intValue()){
+                case 0:json.put(attribute.getName(),resItem.getAttribute1());break;
+                case 1:json.put(attribute.getName(),resItem.getAttribute2());break;
+                case 2:json.put(attribute.getName(),resItem.getAttribute3());break;
+                case 3:json.put(attribute.getName(),resItem.getAttribute4());break;
+                case 4:json.put(attribute.getName(),resItem.getAttribute5());break;
+                case 5:json.put(attribute.getName(),resItem.getAttribute6());break;
+                case 6:json.put(attribute.getName(),resItem.getAttribute7());break;
+                case 7:json.put(attribute.getName(),resItem.getAttribute8());break;
+
+            }
+        }
+
+
+        res.put("name",resItem.getName());
+        res.put("image",resItem.getImage());
+        res.put("description",resItem.getDescription());
+        res.put("locId",resItem.getLocid());
+        res.put("attribute",json.toString());
+
+        return res;
+    }
+
+    public static Map convertItem(GPItem resItem, List<GPItemAttribute> attributeList) {
         Map res = new HashMap();
 
         System.out.println(attributeList);
@@ -41,8 +88,8 @@ public class GPUtil {
 
         res.put("name",resItem.getName());
         res.put("image",resItem.getImage());
-        res.put("typeId",resItem.getTypeid());
         res.put("description",resItem.getDescription());
+        res.put("locId",resItem.getLocid());
 
         return res;
     }
